@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue JS</title>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.4/vue.min.js"></script>
+</head>
+<body>
+
+	<div id="intro">
+		<input v-model="messageIntro">
+		<div :style="styleIntro" :align="alinhar">{{ messageIntro }}</div>
+		<button v-on:click="inverter">I N V E R T E R</button>
+	</div>
+
+	<div id="app1">
+		<input v-model="message"><br>
+		<button :style="styleBotao" v-on:click="buttonClick">{{ message }}</button>
+
+		<ul>
+			<li v-for="pokemon in listaPokemon">{{ pokemon }}</li>
+		</ul>
+
+		<br><br>
+		<span :style="corFundo" :title="message2">
+			I got a secret! Hover your mouse over me.
+		</span>
+	</div>
+
+	<div id="app2">
+		<p v-show="seen">Now you see me</p>
+	</div>
+
+	<div id="app3">
+		<p> {{ mess }}</p>
+		<button v-on:click="reverseMessage">Reverter mensagem</button>
+	</div>
+
+	<div id="app7">
+		<ol>
+			<todo-item v-for="item in listaCoisasX" :todo="item"><div>Monster</div></todo-item>
+		</ol>
+	</div>
+
+	<div id="app8">
+		<ol>
+			<todo-item v-for="item in listaCoisasY" :todo="item"></todo-item>
+		</ol>
+	</div>
+
+	<div id="app9">
+		<ol>
+			<todo-item v-for="item in listaCoisasZ" :todo="item"></todo-item>
+		</ol>
+	</div>
+
+	<div id="outroExemplo">
+	 	<my-component></my-component>
+	</div>
+
+	<div id="vondale">
+		<textarea v-model='pao'></textarea>
+	</div>
+
+	<div id="exemploContador">
+		<div>
+			<simple-counter></simple-counter>
+		</div>
+		<br>
+		<div>
+			<simple-counter></simple-counter>
+		</div>
+		<br>
+		<div>
+			<simple-counter></simple-counter>
+		</div>
+	</div>
+
+	<div id="compChild">
+		<child message="hello!"></child>
+	</div>
+
+	<div id="contadorEvento">
+		<div align="center">
+			<p>{{ total }}</p>
+			<button-counter v-on:increment="incrementTotal"></button-counter>
+			<button-counter v-on:increment="incrementTotal"></button-counter>
+		</div>
+	</div>
+
+	<div id="lay">
+		<app-layout>
+			<h1 slot="header">here might be a page title</h1>
+			<p>A paragraph for the main content.</p>
+			<p>And another one.</p>
+			<p slot="footer">Here's some contact info</p>
+		</app-layout>
+	</div>
+
+	<script>
+
+		Vue.component('button-counter', {
+			template: '<button style="width:40px;height:20px;" v-on:click="increment">{{ counter }}</button>',
+			data: function(){
+				return {
+					counter: 0
+				}
+			},
+			methods: {
+				increment: function(){
+					this.counter += 1
+					this.$emit('increment')
+				}
+			},
+		});
+
+		new Vue({
+			el: '#contadorEvento',
+			data: {
+				total: 0
+			},
+			methods: {
+				incrementTotal: function(){
+					this.total += 1
+				}
+			}
+		});
+
+		Vue.component('child', {
+			props: ['message'],
+			template: '<span>{{ message }}</span>'
+		});
+
+		new Vue({
+			el: '#compChild',
+		});
+
+		Vue.component('simple-counter', {
+			template: '<div align="center">'+
+						  '<button style="width:40px;height:20px;" v-on:click="counter += 1"> + </button><br>'+
+						  '<button style="width:40px;height:20px;" v-on:click="counter -= 1"> - </button>'+
+						  '<div> {{counter}} </div>'+
+					  '</div>',
+
+			data: function(){
+				return {
+					counter: 0
+				}
+			}
+		});
+
+		new Vue({
+			el: '#exemploContador',
+		});
+
+		new Vue({
+			el: '#vondale',
+			data: {
+				pao: 'mortadela'
+			}
+		}); 
+
+		new Vue({
+			el: '#intro',
+			data: {
+				'messageIntro':'',
+				'styleIntro':'width:1200px;heigth:400px;font-size:1500%;font-style:italic;',
+				'alinhar':'center'
+			},
+			methods: {
+				inverter: function(){
+					this.messageIntro = this.messageIntro.split('').reverse().join('')
+				}
+			}
+		});
+
+		new Vue({
+			el: '#app1',
+			data: {
+				'message': 'button name',
+				'corFundo': "background-color:blue;",
+				'styleBotao': "color:red;width:300px;background-color:black;",
+				'listaPokemon': ['pikachu', 'squirtle', 'mew two'],
+				'message2': "I'm Batman"
+			},
+			methods: {
+				buttonClick: function(){
+					alert('====test====');
+				}
+			}
+		});
+
+		new Vue({
+			el: '#app2',
+			data: {
+				seen:true
+			},
+			
+		});
+
+		new Vue({
+			el: '#app3',
+			data: {
+				mess: 'socorram me subi no onibus em marrocos!'
+			},
+			methods: {
+				reverseMessage: function(){
+					this.mess = this.mess.split('').reverse().join('')
+				}
+			}
+		});
+
+		Vue.component('todo-item', {
+			props: ['todo'],
+  			template: '<div><li>{{ todo.text }}</li>'+
+  						'<slot>Red Bull</slot>'+
+  					  '</div>'
+		});
+
+		var appX = new Vue({
+		  el: '#app7',
+		  data: {
+		    listaCoisasX: [
+		      { text: 'Vegetables' },
+		      { text: 'Dogs(Japan)' },
+		      { text: 'Whatever else humans are supposed to eat' }
+		    ]
+		  }
+		});
+
+		var appY = new Vue({
+		  el: '#app8',
+		  data: {
+		    listaCoisasY: [
+		      { text: 'OQ' },
+		      { text: 'QUE' },
+		      { text: 'HOUVE' }
+		    ]
+		  }
+		});
+
+		var appZ = new Vue({
+			el: '#app9',
+			data: {
+				listaCoisasZ: [
+					{text: 'Thor'},
+					{text: 'Hulk'},
+					{text: 'IronMan'}
+				]
+			}
+		});
+
+		Vue.component('my-component', {
+		  template: '<div>A custom component!</div>'
+		});
+
+		new Vue({
+			el: '#outroExemplo',
+		});
+
+		Vue.component('app-layout', {
+			template: '<div class="container">'+
+  						'<header>'+
+    						'<slot name="header"></slot>'+
+  						'</header>'+
+  						'<main>'+
+	    					'<slot>D A L E</slot>'+
+	  					'</main>'+
+	  					'<footer>'+
+	    					'<slot name="footer"></slot>'+
+	  					'</footer>'+
+					  '</div>'
+		});
+
+		new Vue({
+			el: '#lay',
+		});
+
+		Vue.component('child2', {
+			template: '<div class="child">'+
+  						'<slot text="hello from child"></slot>'+
+					  '</div>'
+		});
+
+	</script>
+</body>
+</html>
